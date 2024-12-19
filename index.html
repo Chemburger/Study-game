@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics and Motion Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .feedback {
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        #score {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #finish {
+            font-size: 2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="quiz-container">
+        <h1>Physics Final</h1>
+        <div id="score">Score: 0/0</div>
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div id="feedback" class="feedback" style="display: none;"></div>
+    </div>
+    <div id="finish" style="display: none;">You Finished!</div>
+
+    <script>
+        const quizData = [
+            { question: "The distance an object travels per unit time?", options: ["Speed", "Acceleration", "Distance", "Motion"], answer: "Speed" },
+            { question: "Acceleration toward the center of a curved path?", options: ["Centripetal Acceleration", "Velocity", "Force", "Distance"], answer: "Centripetal Acceleration" },
+            { question: "How far an object has moved?", options: ["Distance", "Motion", "Displacement", "Velocity"], answer: "Distance" },
+            { question: "A change in an object’s position relative to a reference point?", options: ["Motion", "Speed", "Velocity", "Acceleration"], answer: "Motion" },
+            { question: "The rate of change of velocity?", options: ["Velocity", "Acceleration", "Speed", "Momentum"], answer: "Acceleration" },
+            { question: "Anything thrown or shot in the air?", options: ["Projectile", "Displacement", "Centripetal Force", "Gravity"], answer: "Projectile" },
+            { question: "The speed of an object and the direction of its motion?", options: ["Speed", "Displacement", "Velocity", "Acceleration"], answer: "Velocity" },
+            { question: "The distance and direction of an object’s change in position from the starting point?", options: ["Distance", "Displacement", "Velocity", "Acceleration"], answer: "Displacement" },
+            { question: "Which variable is graphed on the x-axis?", options: ["Dependent Variable", "Independent Variable", "Speed", "Velocity"], answer: "Independent Variable" },
+            { question: "In which of the following conditions does a car accelerate?", options: ["Only when speeding up", "Speeds up, slows down, changes direction", "Only when turning", "When moving on a straight path"], answer: "Speeds up, slows down, changes direction" },
+            { question: "At the end of a 400m race (one full lap), what is the displacement of the runner?", options: ["400 m", "200 m", "0 m", "600 m"], answer: "0 m" },
+            { question: "What does p represent in the formula p=mv?", options: ["Potential Energy", "Power", "Momentum", "Velocity"], answer: "Momentum" },
+            { question: "What type of friction prevents movement of an object when force is applied?", options: ["Static", "Sliding", "Rolling", "Fluid"], answer: "Static" },
+            { question: "The maximum speed an object will reach when falling through the air?", options: ["Speed", "Terminal Velocity", "Momentum", "Acceleration"], answer: "Terminal Velocity" },
+            { question: "If gravity is the only force acting on an object, what is it called?", options: ["Free Fall", "Terminal Velocity", "Acceleration", "Weight"], answer: "Free Fall" },
+            { question: "Which of the following states that for every action there is an equal and opposite reaction?", options: ["Newton's 1st Law", "Newton's 2nd Law", "Newton's 3rd Law", "Law of Inertia"], answer: "Newton's 3rd Law" },
+            { question: "Which law states that an object in motion stays in motion unless acted on by an unbalanced force?", options: ["Newton's 3rd Law", "Newton's 2nd Law", "Newton's 1st Law", "Law of Momentum"], answer: "Newton's 1st Law" },
+            { question: "The sum of all the forces acting on an object?", options: ["Friction", "Inertia", "Net Force", "Momentum"], answer: "Net Force" },
+            { question: "Which type of force results in movement?", options: ["Static Force", "Balanced Force", "Unbalanced Force", "Gravitational Force"], answer: "Unbalanced Force" },
+            { question: "What type of energy is due to motion?", options: ["Potential Energy", "Kinetic Energy", "Mechanical Energy", "Elastic Energy"], answer: "Kinetic Energy" },
+            { question: "What is the SI unit of electrical power?", options: ["Amperes", "Volts", "Watts", "Ohms"], answer: "Watts" },
+            { question: "What is the charge of the nucleus of an atom?", options: ["Negative", "Neutral", "Positive", "No Charge"], answer: "Positive" },
+            { question: "What type of current is used in homes?", options: ["Direct Current", "Alternating Current", "Series Current", "Parallel Current"], answer: "Alternating Current" },
+            { question: "Which region of a magnet is where the magnetic force is strongest?", options: ["Magnetic Poles", "Magnetic Domains", "Magnetic Fields", "Electromagnets"], answer: "Magnetic Poles" },
+            { question: "What type of wave interaction occurs when a wave bounces off an object?", options: ["Refraction", "Diffraction", "Reflection", "Interference"], answer: "Reflection" },
+            { question: "What is the distance between one point on a wave and the nearest point just like it?", options: ["Amplitude", "Period", "Frequency", "Wavelength"], answer: "Wavelength" },
+            { question: "What happens when a negatively charged rod is brought close to an electroscope?", options: ["Leaves move further apart", "Leaves come together", "No effect", "Leaves change color"], answer: "Leaves move further apart" },
+        ];
+
+        let shuffledQuestions = shuffleArray([...quizData]); // Shuffle the questions
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+        let answeredQuestions = 0; // To track answered questions
+
+        const questionElement = document.getElementById("question");
+        const optionsElement = document.getElementById("options");
+        const feedbackElement = document.getElementById("feedback");
+        const scoreElement = document.getElementById("score");
+        const quizContainer = document.getElementById("quiz-container");
+        const finishElement = document.getElementById("finish");
+
+        // Shuffle an array
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        // Load the current question
+        function loadQuestion() {
+            feedbackElement.style.display = "none";
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                finishQuiz();
+                return;
+            }
+
+            const currentQuestion = shuffledQuestions[currentQuestionIndex];
+            questionElement.textContent = `Q${currentQuestionIndex + 1}: ${currentQuestion.question}`;
+            optionsElement.innerHTML = "";
+
+            const shuffledOptions = shuffleArray([...currentQuestion.options]); // Shuffle options
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => checkAnswer(option));
+                optionsElement.appendChild(button);
+            });
+        }
+
+        // Check the selected answer
+        function checkAnswer(selectedOption) {
+            const correctAnswer = shuffledQuestions[currentQuestionIndex].answer;
+            feedbackElement.style.display = "block";
+            if (selectedOption === correctAnswer) {
+                feedbackElement.textContent = "Correct!";
+                feedbackElement.className = "feedback correct";
+                correctAnswers++;
+            } else {
+                feedbackElement.textContent = `Wrong! Correct answer: ${correctAnswer}`;
+                feedbackElement.className = "feedback wrong";
+            }
+
+            // Update answered questions count and score display
+            answeredQuestions++;
+            scoreElement.textContent = `Score: ${correctAnswers}/${answeredQuestions}`;
+
+            currentQuestionIndex++;
+            setTimeout(loadQuestion, 1000); // Wait 1 second before loading the next question
+        }
+
+        // Finish the quiz
+        function finishQuiz() {
+            quizContainer.style.display = "none";
+            finishElement.style.display = "block";
+        }
+
+        // Start the quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
