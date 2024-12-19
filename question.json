@@ -2,7 +2,7 @@
     { "question": "The distance an object travels per unit time?", "options": ["Speed", "Acceleration", "Distance", "Motion"], "answer": "Speed" },
     { "question": "Acceleration toward the center of a curved path?", "options": ["Centripetal Acceleration", "Velocity", "Force", "Distance"], "answer": "Centripetal Acceleration" },
     { "question": "How far an object has moved?", "options": ["Distance", "Motion", "Displacement", "Velocity"], "answer": "Distance" },
-    { "question": "A change in an object’s position relative to a reference point?", "options": ["Motion", "Speed", "Velocity", "Acceleration"], "answer": "Motion" },
+    { "question": "A change in an object’s position relative to a reference point?", "options": ["Motion", "Displacement", "Velocity", "Acceleration"], "answer": "Displacement" },
     { "question": "The rate of change of velocity?", "options": ["Velocity", "Acceleration", "Speed", "Momentum"], "answer": "Acceleration" },
     { "question": "Anything thrown or shot in the air?", "options": ["Projectile", "Displacement", "Centripetal Force", "Gravity"], "answer": "Projectile" },
     { "question": "The speed of an object and the direction of its motion?", "options": ["Speed", "Displacement", "Velocity", "Acceleration"], "answer": "Velocity" },
